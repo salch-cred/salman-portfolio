@@ -188,8 +188,7 @@ html.booted .boot { display: none; }
   align-items: center;
   padding: 14px var(--pad);
   font: 400 13px var(--mono);
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
-  backdrop-filter: blur(10px);
+  background: #fff;
 }
 .nav a { text-decoration: none; }
 .nav-prompt { color: var(--fg); }
@@ -204,8 +203,7 @@ html.booted .boot { display: none; }
   position: relative;
   height: max(100svh, 680px);
   overflow: hidden;
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background: #fff;
 }
 .hero-l, .hero-r {
   position: absolute;
