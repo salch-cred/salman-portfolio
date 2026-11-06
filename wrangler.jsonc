@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "salman-portfolio",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "salman-portfolio" }],
+  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "af5e6b8c85784f8d90e0975199928fc2" }],
+  "observability": { "enabled": true }
+}

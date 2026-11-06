@@ -22,6 +22,15 @@ plugins, plus authored and co-authored commits on Hermes Agent main. The contrib
 
 Use a fine-grained token with read-only access to public repositories.
 
+## Cloudflare
+
+```bash
+npm run cf:deploy
+```
+
+Always deploy with this script. It moves `.env` files aside first, because OpenNext otherwise copies them
+into the Worker bundle. Set the token as a secret with `npx wrangler secret put GITHUB_TOKEN`.
+
 ## Editing content
 
 | What | Where |
