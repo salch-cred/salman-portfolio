@@ -32,7 +32,7 @@ export const RESUME = {
       org: 'Nous Research, Hermes Agent',
       meta: 'Remote | Jul 2026 - Present',
       bullets: [
-        '39 commit credits on the main branch of Hermes Agent (260k+ GitHub stars): 25 authored and 14 co-authored, plus a merged pull request.',
+        '39 commit credits on the main branch of Hermes Agent (260k+ GitHub stars): 25 authored and 14 co-authored, plus 11 merged pull requests across Hermes Agent and the official plugins.',
         'Hardened gateway lifecycle in Python: durable startup-failure stamps, unprovable-ownership handling for restart loops, and liveness probe diagnostics.',
         'Bounded tool availability probes so a wedged check cannot hang an agent turn, and scoped git force-push approval patterns to the command segment.',
         'Improved SQLite state and cron reliability, including stable tool identity for display rows and failure stamps that keep healed runs visible.',

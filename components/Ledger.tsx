@@ -6,8 +6,9 @@ import { GitCommitIcon, GitMergeIcon, UserGroupIcon } from '@hugeicons/core-free
 import type { Credit, GitHubData, Rank } from '@/lib/github-fetch';
 
 type Filter = 'all' | Credit['kind'];
-const ICON = { merged: GitMergeIcon, authored: GitCommitIcon, 'co-authored': UserGroupIcon };
-const FILTERS: Filter[] = ['all', 'merged', 'authored', 'co-authored'];
+const ICON = { merged: GitMergeIcon, plugin: GitMergeIcon, authored: GitCommitIcon, 'co-authored': UserGroupIcon };
+const LABEL = { merged: 'agent merged', plugin: 'plugin merged', authored: 'authored', 'co-authored': 'co-authored' };
+const FILTERS: Filter[] = ['all', 'plugin', 'merged', 'authored', 'co-authored'];
 
 export default function Ledger({ data }: { data: GitHubData }) {
   const [filter, setFilter] = useState<Filter>('all');
@@ -27,7 +28,7 @@ export default function Ledger({ data }: { data: GitHubData }) {
 
   const rows = data.credits.filter((c) => filter === 'all' || c.kind === filter);
   const count = (f: Filter) => (f === 'all' ? data.credits.length : data.credits.filter((c) => c.kind === f).length);
-  const formula = filter === 'all' ? '=COUNTA(hermes_agent.credits)' : `=COUNTIF(kind,"${filter}")`;
+  const formula = filter === 'all' ? '=COUNTA(hermes_agent.credits)' : `=COUNTIF(kind,"${LABEL[filter]}")`;
 
   return (
     <div className="sheet rise">
@@ -49,8 +50,12 @@ export default function Ledger({ data }: { data: GitHubData }) {
           <dd>{data.totals.coAuthored}</dd>
         </div>
         <div>
-          <dt>Merged PRs</dt>
+          <dt>Agent PRs merged</dt>
           <dd>{data.totals.merged}</dd>
+        </div>
+        <div>
+          <dt>Plugin PRs merged</dt>
+          <dd>{data.totals.pluginsMerged}</dd>
         </div>
       </dl>
 
@@ -65,7 +70,7 @@ export default function Ledger({ data }: { data: GitHubData }) {
         <div className="sheet-states" role="group" aria-label="Filter credits">
           {FILTERS.map((f) => (
             <button key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}>
-              {f} <small>{count(f)}</small>
+              {f === 'all' ? 'all' : LABEL[f]} <small>{count(f)}</small>
             </button>
           ))}
         </div>
@@ -89,7 +94,7 @@ export default function Ledger({ data }: { data: GitHubData }) {
                 <td>
                   <span className={`st st-${c.kind}`}>
                     <HugeiconsIcon icon={ICON[c.kind]} size={13} strokeWidth={1.8} />
-                    {c.kind}
+                    {LABEL[c.kind]}
                   </span>
                 </td>
                 <td>{c.id}</td>

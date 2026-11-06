@@ -17,8 +17,8 @@ The token lives in `.env.local` as `GITHUB_TOKEN` and is only read on the server
 GitHub at most once an hour when someone visits. If GitHub or the token fails, the site falls back to
 `data/snapshot.json`.
 
-The contribution sheet shows Hermes Agent only: merged pull requests, authored commits and co-authored
-commits. The contributor rank comes from `/api/rank`, which every page load reads, cached for 60 seconds.
+The contribution sheet shows Hermes work only: merged pull requests in Hermes Agent and its official
+plugins, plus authored and co-authored commits on Hermes Agent main. The contributor rank comes from `/api/rank`, which every page load reads, cached for 60 seconds.
 
 Use a fine-grained token with read-only access to public repositories.
 

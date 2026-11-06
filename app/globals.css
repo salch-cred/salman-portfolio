@@ -620,7 +620,7 @@ html.booted .boot { display: none; }
 .sheet td a { text-decoration: none; }
 .sheet td a:hover { color: var(--c4); text-decoration: underline; }
 .st { display: inline-flex; align-items: center; gap: 5px; color: var(--dim); }
-.st-merged { color: var(--c4); font-weight: 500; }
+.st-merged, .st-plugin { color: var(--c4); font-weight: 500; }
 .st-authored { color: var(--fg); }
 
 /* Pinboard */
@@ -848,7 +848,7 @@ main { overflow-x: clip; }
 .rise.in { opacity: 1; transform: none; }
 
 /* Credits */
-.tally { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); margin-bottom: 26px; background: var(--paper); border: 1px solid var(--line-2); }
+.tally { display: grid; grid-template-columns: 1.3fr repeat(5, 1fr); margin-bottom: 26px; background: var(--paper); border: 1px solid var(--line-2); }
 .tally div { padding: 14px 18px 12px; }
 .tally div + div { border-left: 1px solid var(--line); }
 .tally dt { font: 400 11.5px var(--mono); color: var(--dim); }
@@ -865,7 +865,8 @@ main { overflow-x: clip; }
   .foot-lead { padding-right: 104px; }
   .tally { grid-template-columns: repeat(2, 1fr); }
   .tally-rank { grid-column: 1 / -1; }
-  .tally div:nth-child(2) { border-left: 0; }
+  .tally div:nth-child(even) { border-left: 0; }
+  .tally div:last-child { grid-column: 1 / -1; border-left: 0; }
   .tally div:nth-child(n + 2) { border-top: 1px solid var(--line); }
   .sec-title { max-width: calc(100% - 100px); }
   .folder-in, .two { grid-template-columns: minmax(0, 1fr); }

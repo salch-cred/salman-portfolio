@@ -2,7 +2,7 @@
 export type Day = { d: string; c: number };
 export type Year = { key: string; label: string; total: number; days: Day[] };
 export type Credit = {
-  kind: 'merged' | 'authored' | 'co-authored';
+  kind: 'merged' | 'plugin' | 'authored' | 'co-authored';
   id: string;
   m: string;
   u: string;
@@ -15,11 +15,12 @@ export type GitHubData = {
   years: Year[];
   credits: Credit[];
   rank: Rank | null;
-  totals: { commits: number; authored: number; coAuthored: number; merged: number };
+  totals: { commits: number; authored: number; coAuthored: number; merged: number; pluginsMerged: number };
 };
 
 export const LOGIN = 'salch-cred';
 export const HERMES = 'NousResearch/hermes-agent';
+export const PLUGINS = 'NousResearch/hermes-official-plugins';
 type Init = Record<string, unknown>;
 
 const gitHubHeaders = (token: string) => ({
@@ -102,16 +103,21 @@ export async function fetchGitHub(token: string, init: Init = {}): Promise<GitHu
 
   const credits: Credit[] = [];
 
-  // Merged pull requests in Hermes Agent.
-  const merged = await gql(
-    `query($q:String!){ search(query:$q, type:ISSUE, first:100){ nodes { ... on PullRequest {
-      title url number mergedAt
-    } } } }`,
-    { q: `is:pr is:merged author:${LOGIN} repo:${HERMES}` },
-  );
-  for (const p of merged.search.nodes) {
-    credits.push({ kind: 'merged', id: `#${p.number}`, m: p.title, u: p.url, d: p.mergedAt.slice(0, 10) });
+  // Merged pull requests in Hermes Agent and its official plugins.
+  async function mergedIn(repo: string, kind: Credit['kind']) {
+    const data = await gql(
+      `query($q:String!){ search(query:$q, type:ISSUE, first:100){ nodes { ... on PullRequest {
+        title url number mergedAt
+      } } } }`,
+      { q: `is:pr is:merged author:${LOGIN} repo:${repo}` },
+    );
+    for (const p of data.search.nodes) {
+      credits.push({ kind, id: `#${p.number}`, m: p.title, u: p.url, d: p.mergedAt.slice(0, 10) });
+    }
+    return data.search.nodes.length as number;
   }
+  const merged = await mergedIn(HERMES, 'merged');
+  const pluginsMerged = await mergedIn(PLUGINS, 'plugin');
 
   // Commit search only indexes the default branch, so everything here is on main.
   async function searchCommits(q: string) {
@@ -151,7 +157,8 @@ export async function fetchGitHub(token: string, init: Init = {}): Promise<GitHu
       commits: authored.length + coAuthored.length,
       authored: authored.length,
       coAuthored: coAuthored.length,
-      merged: merged.search.nodes.length,
+      merged,
+      pluginsMerged,
     },
   };
 }
