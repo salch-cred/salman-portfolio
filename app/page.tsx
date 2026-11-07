@@ -1,6 +1,7 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
   ArrowUpRight01Icon,
+  Folder01Icon,
   Download01Icon,
   GithubIcon,
   Mail01Icon,
@@ -198,6 +199,14 @@ export default async function Home() {
             X
           </a>
         </div>
+        <a className="foot-file" href="/important/OS_Lab_CPU_Scheduling_and_System_Calls.pdf" target="_blank" rel="noreferrer">
+          <span className="foot-file-tab">Important</span>
+          <span className="foot-file-body">
+            <HugeiconsIcon icon={Folder01Icon} size={15} strokeWidth={1.6} />
+            OS Lab, PDF
+            <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} strokeWidth={1.6} />
+          </span>
+        </a>
         <FooterMark text="Let's build" />
       </footer>
     </>
