@@ -711,7 +711,7 @@ html.booted .boot { display: none; }
 
 /* Resume page */
 .cv-wrap { max-width: 860px; margin: 0 auto; padding: 26px 20px 80px; }
-.cv-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.cv-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .cv {
   padding: clamp(24px, 6vw, 60px);
   border-radius: 3px;
@@ -844,6 +844,101 @@ main { overflow-x: clip; }
 .sec-title.in { opacity: 1; transform: none; }
 .rise { opacity: 0; transform: translateY(30px); transition: opacity 0.7s 0.15s, transform 0.9s 0.15s var(--ease); }
 .rise.in { opacity: 1; transform: none; }
+
+/* Resume download */
+.resume-cta { align-items: center; }
+.dl {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: min(100%, 318px);
+  padding: 11px 14px 11px 12px;
+  background: var(--paper);
+  border-radius: 12px;
+  color: var(--fg);
+  text-decoration: none;
+  box-shadow: 4px 4px 0 var(--c1);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.3s;
+}
+.dl:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--c2); }
+.dl:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--c2); }
+.dl.is-done { background: color-mix(in srgb, var(--c1) 34%, var(--paper)); }
+
+.dl-trace { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.dl-trace rect {
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  fill: none;
+  stroke: var(--c4);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 26 8 3 8 3 52;
+  animation: dl-run 9s linear infinite;
+}
+.dl:hover .dl-trace rect { animation-duration: 3.5s; }
+.dl.is-busy .dl-trace rect { animation-duration: 0.9s; stroke-dasharray: 62 38; }
+.dl.is-done .dl-trace rect { animation: none; stroke-dasharray: none; }
+@keyframes dl-run { to { stroke-dashoffset: -100; } }
+
+.dl-tray { position: relative; flex: none; width: 42px; height: 50px; overflow: hidden; }
+.dl-tray::after { content: ''; position: absolute; inset: auto 0 0; height: 9px; background: var(--c1); border: 1px solid var(--line-2); border-radius: 2px 2px 5px 5px; }
+.dl-sheet {
+  position: absolute;
+  left: 6px;
+  top: 3px;
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  width: 30px;
+  height: 40px;
+  padding: 8px 5px 0;
+  background: #fff;
+  border: 1px solid var(--fg);
+  border-radius: 2px;
+  clip-path: polygon(0 0, 72% 0, 100% 22%, 100% 100%, 0 100%);
+  animation: dl-float 3.2s ease-in-out infinite;
+  transition: transform 0.45s var(--ease);
+}
+.dl-sheet i { display: block; height: 1.5px; background: var(--fg); transform-origin: 0 50%; }
+.dl-sheet i:nth-child(1) { width: 62%; background: var(--c4); height: 2.5px; }
+.dl-sheet i:nth-child(3) { width: 84%; }
+.dl-sheet i:nth-child(5) { width: 55%; }
+.dl:hover .dl-sheet { animation: none; transform: translateY(-3px); }
+.dl:hover .dl-sheet i { animation: dl-write 0.5s calc(var(--n, 0) * 1ms) var(--ease) backwards; }
+.dl-sheet i:nth-child(2) { --n: 70; }
+.dl-sheet i:nth-child(3) { --n: 140; }
+.dl-sheet i:nth-child(4) { --n: 210; }
+.dl-sheet i:nth-child(5) { --n: 280; }
+.dl.is-busy .dl-sheet { animation: none; transform: translateY(35px); transition-duration: 0.95s; }
+.dl.is-done .dl-sheet { animation: none; transform: translateY(35px); }
+@keyframes dl-float { 50% { transform: translateY(2px); } }
+@keyframes dl-write { from { transform: scaleX(0); } }
+
+.dl-copy { flex: 1; min-width: 0; display: grid; gap: 1px; }
+.dl-copy b { font: 400 20px/1.1 var(--serif); letter-spacing: -0.005em; }
+.dl-copy small { font: 400 11px var(--mono); color: var(--dim); }
+.dl-rule { display: block; height: 5px; margin-top: 5px; background: repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 6px); }
+.dl-rule em { display: block; height: 100%; background: var(--c4); transform: scaleX(0); transform-origin: 0 50%; }
+.dl.is-busy .dl-rule em { transform: scaleX(1); transition: transform 0.95s linear; }
+.dl.is-done .dl-rule em { transform: scaleX(1); }
+
+.dl-mark { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--c4); color: var(--bg); }
+.dl:hover .dl-mark svg { animation: dl-nudge 0.8s var(--ease) infinite; }
+.dl.is-busy .dl-mark svg { animation: dl-nudge 0.5s var(--ease) infinite; }
+.dl.is-done .dl-mark { animation: dl-pop 0.45s var(--ease); }
+@keyframes dl-nudge { 50% { transform: translateY(3px); } }
+@keyframes dl-pop { from { transform: scale(0.5); } }
+
+.dl-tiles { position: absolute; z-index: 2; left: 50%; top: 50%; pointer-events: none; }
+.dl-tiles i { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 2px; opacity: 0; }
+.dl.is-done .dl-tiles i { animation: dl-burst 0.9s var(--ease) both; }
+@keyframes dl-burst {
+  0% { opacity: 1; transform: rotate(var(--a)) translateX(30px) scale(0.5); }
+  65% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(calc(var(--r) * 2.1)) rotate(120deg) scale(1); }
+}
 
 /* Credits */
 .tally { display: grid; grid-template-columns: 1.3fr repeat(5, 1fr); margin-bottom: 26px; background: var(--paper); border: 1px solid var(--line-2); }

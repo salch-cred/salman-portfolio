@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowUpRight01Icon, Download01Icon } from '@hugeicons/core-free-icons';
+import { ArrowUpRight01Icon } from '@hugeicons/core-free-icons';
+import DownloadResume from '@/components/DownloadResume';
 import { RESUME } from '@/lib/resume';
 
 export const metadata: Metadata = { title: 'Resume, Mahammad Salman' };
@@ -14,10 +15,7 @@ export default function ResumePage() {
           <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} strokeWidth={1.6} style={{ transform: 'rotate(-135deg)' }} />
           Back
         </a>
-        <a href="/Mahammad-Salman-Resume.pdf" download className="btn">
-          <HugeiconsIcon icon={Download01Icon} size={16} strokeWidth={1.6} />
-          Download PDF
-        </a>
+        <DownloadResume />
       </div>
 
       <article className="cv">

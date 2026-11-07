@@ -1,7 +1,6 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
   ArrowUpRight01Icon,
-  Download01Icon,
   GithubIcon,
   Mail01Icon,
   NewTwitterIcon,
@@ -14,6 +13,7 @@ import Folders from '@/components/Folders';
 import Pinboard from '@/components/Pinboard';
 import Fig from '@/components/Fig';
 import FooterMark from '@/components/FooterMark';
+import DownloadResume from '@/components/DownloadResume';
 import Flow from '@/components/Flow';
 import Deco from '@/components/Deco';
 import { getGitHub } from '@/lib/github';
@@ -165,10 +165,7 @@ export default async function Home() {
               ))}
             </ul>
             <div className="resume-cta">
-              <a href="/Mahammad-Salman-Resume.pdf" download className="btn">
-                <HugeiconsIcon icon={Download01Icon} size={16} strokeWidth={1.6} />
-                Resume PDF
-              </a>
+              <DownloadResume />
               <a href="/resume" className="btn ghost">
                 Read it here
                 <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} strokeWidth={1.6} />
