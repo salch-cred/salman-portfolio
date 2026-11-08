@@ -243,6 +243,9 @@ export default function Lanyard({ barcode, commits }: { barcode: number[]; commi
                   <span>Salman</span>
                 </p>
                 <p className="paper-role">{PERSON.role}</p>
+                <p className="paper-org">
+                  Developer at <b>@NousResearch</b>
+                </p>
                 <dl>
                   <dt>Currently</dt>
                   <dd>MCA, AI/ML &amp; Data Science @ Yenepoya University. Studying robotics basics.</dd>
