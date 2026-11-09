@@ -20,7 +20,7 @@ export type GitHubData = {
 
 export const LOGIN = 'salch-cred';
 export const HERMES = 'NousResearch/hermes-agent';
-export const PLUGINS = 'NousResearch/hermes-official-plugins';
+export const PLUGINS = ['NousResearch/hermes-official-plugins', 'NousResearch/hermes-labs-plugins'];
 type Init = Record<string, unknown>;
 
 const gitHubHeaders = (token: string) => ({
@@ -104,7 +104,7 @@ export async function fetchGitHub(token: string, init: Init = {}): Promise<GitHu
   const credits: Credit[] = [];
 
   // Merged pull requests in Hermes Agent and its official plugins.
-  async function mergedIn(repo: string, kind: Credit['kind']) {
+  async function mergedIn(repo: string, kind: Credit['kind'], tag = '') {
     const data = await gql(
       `query($q:String!){ search(query:$q, type:ISSUE, first:100){ nodes { ... on PullRequest {
         title url number mergedAt
@@ -112,12 +112,13 @@ export async function fetchGitHub(token: string, init: Init = {}): Promise<GitHu
       { q: `is:pr is:merged author:${LOGIN} repo:${repo}` },
     );
     for (const p of data.search.nodes) {
-      credits.push({ kind, id: `#${p.number}`, m: p.title, u: p.url, d: p.mergedAt.slice(0, 10) });
+      credits.push({ kind, id: `${tag}#${p.number}`, m: p.title, u: p.url, d: p.mergedAt.slice(0, 10) });
     }
     return data.search.nodes.length as number;
   }
   const merged = await mergedIn(HERMES, 'merged');
-  const pluginsMerged = await mergedIn(PLUGINS, 'plugin');
+  let pluginsMerged = 0;
+  for (const repo of PLUGINS) pluginsMerged += await mergedIn(repo, 'plugin', repo.includes('labs') ? 'labs ' : '');
 
   // Commit search only indexes the default branch, so everything here is on main.
   async function searchCommits(q: string) {
