@@ -1,7 +1,9 @@
 // Builds the ATS resume PDF from lib/resume.ts: one column, no tables, no images, real text.
-import { createWriteStream } from 'node:fs';
+import { createWriteStream, readFileSync } from 'node:fs';
 import PDFDocument from 'pdfkit';
-import { RESUME as R } from '../lib/resume.ts';
+import { resumeWith } from '../lib/resume.ts';
+
+const R = resumeWith(JSON.parse(readFileSync('data/snapshot.json', 'utf8')).totals);
 
 const dir = 'node_modules/@fontsource/ibm-plex-sans/files';
 const REG = `${dir}/ibm-plex-sans-latin-400-normal.woff`;

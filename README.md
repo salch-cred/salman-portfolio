@@ -22,6 +22,15 @@ plugins, plus authored and co-authored commits on Hermes Agent main. The contrib
 
 Use a fine-grained token with read-only access to public repositories.
 
+## Daily refresh
+
+`.github/workflows/daily-refresh.yml` runs every day at 03:00 India time, and can be started by hand from the
+Actions tab. It fetches the Hermes credits, rebuilds the resume PDF, commits any change and redeploys.
+It refuses to commit if any count goes down, since that usually means GitHub returned partial data.
+
+Repository secrets it uses: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `CLOUDFLARE_API_TOKEN`,
+`CLOUDFLARE_ACCOUNT_ID`, and optionally `GH_READ_TOKEN`. A deploy step is skipped if its token is missing.
+
 ## Cloudflare
 
 ```bash

@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { ArrowUpRight01Icon } from '@hugeicons/core-free-icons';
 import DownloadResume from '@/components/DownloadResume';
-import { RESUME } from '@/lib/resume';
+import { resumeWith } from '@/lib/resume';
+import snapshot from '@/data/snapshot.json';
 
 export const metadata: Metadata = { title: 'Resume, Mahammad Salman' };
 
 export default function ResumePage() {
-  const r = RESUME;
+  const r = resumeWith(snapshot.totals);
   return (
     <main className="cv-wrap">
       <div className="cv-bar">

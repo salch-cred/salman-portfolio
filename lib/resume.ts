@@ -32,7 +32,7 @@ export const RESUME = {
       org: 'Nous Research, Hermes Agent',
       meta: 'Remote | Jul 2026 - Present',
       bullets: [
-        '44 commit credits on the main branch of Hermes Agent (260k+ GitHub stars): 30 authored and 14 co-authored, plus 14 merged pull requests across Hermes Agent and its plugin repositories.',
+        '{commits} commit credits on the main branch of Hermes Agent (260k+ GitHub stars): {authored} authored and {coAuthored} co-authored, plus {merged} merged pull requests across Hermes Agent and its plugin repositories.',
         'Hardened gateway lifecycle in Python: durable startup-failure stamps, unprovable-ownership handling for restart loops, and liveness probe diagnostics.',
         'Bounded tool availability probes so a wedged check cannot hang an agent turn, and scoped git force-push approval patterns to the command segment.',
         'Improved SQLite state and cron reliability, including stable tool identity for display rows and failure stamps that keep healed runs visible.',
@@ -87,3 +87,11 @@ export const RESUME = {
     },
   ],
 };
+
+type Totals = { commits: number; authored: number; coAuthored: number; merged: number; pluginsMerged: number };
+
+/** Fills the {placeholders} with the GitHub totals, so the numbers refresh with the daily data. */
+export function resumeWith(t: Totals): typeof RESUME {
+  const values: Record<string, number> = { ...t, merged: t.merged + t.pluginsMerged };
+  return JSON.parse(JSON.stringify(RESUME).replace(/\{(\w+)\}/g, (m, k) => (k in values ? String(values[k]) : m)));
+}
