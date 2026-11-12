@@ -20,6 +20,8 @@ export type GitHubData = {
 
 export const LOGIN = 'salch-cred';
 export const HERMES = 'NousResearch/hermes-agent';
+// Merged PRs left off the site at the owner's request, along with the commit they landed as.
+const HIDDEN_PRS = ['#154166'];
 export const PLUGINS = ['NousResearch/hermes-official-plugins', 'NousResearch/hermes-labs-plugins'];
 type Init = Record<string, unknown>;
 
@@ -146,20 +148,23 @@ export async function fetchGitHub(token: string, init: Init = {}): Promise<GitHu
   );
   for (const c of coAuthored) credits.push(toCredit('co-authored', c));
 
-  credits.sort((a, b) => b.d.localeCompare(a.d));
+  const hiddenTitles = new Set(credits.filter((c) => c.kind === 'merged' && HIDDEN_PRS.includes(c.id)).map((c) => c.m));
+  const shown = credits.filter((c) => !HIDDEN_PRS.includes(c.id) && !(c.kind !== 'merged' && c.kind !== 'plugin' && hiddenTitles.has(c.m)));
+  shown.sort((a, b) => b.d.localeCompare(a.d));
+  const count = (kind: Credit['kind']) => shown.filter((c) => c.kind === kind).length;
 
   return {
     fetchedAt: now.toISOString(),
     login: LOGIN,
     years,
-    credits,
+    credits: shown,
     rank: await fetchRank(token, init),
     totals: {
-      commits: authored.length + coAuthored.length,
-      authored: authored.length,
-      coAuthored: coAuthored.length,
-      merged,
-      pluginsMerged,
+      commits: count('authored') + count('co-authored'),
+      authored: count('authored'),
+      coAuthored: count('co-authored'),
+      merged: count('merged'),
+      pluginsMerged: count('plugin'),
     },
   };
 }
